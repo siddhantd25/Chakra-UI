@@ -1,37 +1,61 @@
-import { Container, Heading, Text, Box, filter } from "@chakra-ui/react"
-import { color } from "framer-motion"
+import { EditIcon, ViewIcon } from "@chakra-ui/icons"
+import { 
+  Box, 
+  SimpleGrid,
+  Text,
+  Flex,
+  Heading,
+  Card, 
+  CardHeader,
+  CardBody,
+  CardFooter,
+  HStack,
+  Divider,
+  Button
+} from "@chakra-ui/react"
+import { useLoaderData } from "react-router-dom"
 
 export default function Dashboard() {
-
-  const boxStyles = {
-    p: "10px",
-    bg:"purple.500",
-    color:"white",
-    m:"10px",
-    textAlign: "center",
-    filter:"blur(2px)",
-    'hover' : {
-      color:'black',
-      bg:'blue.200'
-    }
-
-  }
+  const tasks = useLoaderData()
 
   return (
-    <Container as="section" maxWidth="4xl" py="20px">
-      <Heading my="30px" p="10px">Chakra Ui</Heading>
-      <Text marginLeft="30px">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, perferendis.
-      </Text>
-      <Text marginLeft="30px" color="blue.300" fontWeight="bold">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, perferendis.
-      </Text>
+    <SimpleGrid spacing={10} minChildWidth={300}>
+      {tasks && tasks.map(task => (
+        <Card key={task.id} borderTop="8px" borderColor="purple.400" bg="white">
 
-      <Box my="30px" p="20px" bg="orange">
-        This is a box
-      </Box>
+          <CardHeader color="gray.700">
+            <Flex gap={5}>
+              <Box w="50px" h="50px">
+                <Text>AV</Text>
+              </Box>
+              <Box>
+                <Heading as="h3" size="sm">{task.title}</Heading>
+                <Text>by {task.author}</Text>
+              </Box>
+            </Flex>
+          </CardHeader>
 
-      <Box sx={boxStyles}>
-        Hello world
-      </Box>
-    </Container>
+          <CardBody color="gray.500">
+            <Text>{task.description}</Text>
+          </CardBody>
+
+          <Divider borderColor="gray.200" />
+
+          <CardFooter>
+            <HStack>
+              <Button variant="ghost" leftIcon={<ViewIcon />}>Watch</Button>
+              <Button variant="ghost" leftIcon={<EditIcon />}>Comment</Button>
+            </HStack>
+          </CardFooter>
+
+        </Card>
+      ))}
+    </SimpleGrid>
   )
+}
+
+export const tasksLoader = async () => {
+  const res = await fetch('http://localhost:3000/tasks')
+
+  return res.json()
 }
