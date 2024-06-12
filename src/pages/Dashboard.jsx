@@ -10,10 +10,11 @@ export default function Dashboard() {
     m:"10px",
     textAlign: "center",
     filter:"blur(2px)",
-    ':hover' : {
+    'hover' : {
       color:'black',
       bg:'blue.200'
     }
+
   }
 
   return (
